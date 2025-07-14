@@ -2,6 +2,9 @@ import React from 'react';
 import profilePhoto from '../assets/profile-photo.jpeg';
 
 const About = () => {
+  // Separate variable for summary text
+  const summary = "Software Developer with over a year of experience in Salesforce CRM development and modern web technologies. I specialize in building custom solutions using Apex, Lightning Web Components, React, and Node.js. I'm passionate about creating efficient, scalable solutions and always eager to learn new technologies. Looking to expand my skills and contribute to innovative projects as part of a team where I can make a real impact.";
+
   return (
     <section id="about" className="section-padding bg-white">
       <div className="container-custom">
@@ -33,27 +36,20 @@ const About = () => {
             {/* Right Column - Content */}
             <div className="space-y-6">
               <h3 className="text-2xl font-semibold text-gray-900">
-                Full Stack Developer
+                Software Developer
               </h3>
               
               <p className="text-gray-600 leading-relaxed">
-                I'm a passionate software developer with expertise in modern web technologies. 
-                I love creating efficient, scalable solutions that provide exceptional user experiences.
-              </p>
-              
-              <p className="text-gray-600 leading-relaxed">
-                With a strong foundation in both frontend and backend development, 
-                I specialize in React, Node.js, and cloud technologies. I'm always 
-                eager to learn new technologies and take on challenging projects.
+                {summary}
               </p>
 
               <div className="grid grid-cols-2 gap-4 pt-4">
                 <div className="text-center p-4 bg-gray-50 rounded-lg">
-                  <div className="text-2xl font-bold text-primary">3+</div>
+                  <div className="text-2xl font-bold text-primary">1.5+</div>
                   <div className="text-sm text-gray-600">Years Experience</div>
                 </div>
                 <div className="text-center p-4 bg-gray-50 rounded-lg">
-                  <div className="text-2xl font-bold text-primary">20+</div>
+                  <div className="text-2xl font-bold text-primary">8+</div>
                   <div className="text-sm text-gray-600">Projects Completed</div>
                 </div>
               </div>

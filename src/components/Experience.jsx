@@ -1,35 +1,43 @@
 import React from 'react';
 
 const Experience = () => {
+  // Dynamic experience data - add new experience here
   const experiences = [
     {
-      title: "Senior Full Stack Developer",
-      company: "Tech Solutions Inc.",
-      period: "2023 - Present",
-      description: "Led development of enterprise web applications using React, Node.js, and cloud technologies. Mentored junior developers and implemented best practices.",
-      technologies: ["React", "Node.js", "AWS", "MongoDB", "Docker"]
+      id: 1,
+      title: "Salesforce Consultant",
+      company: "Gauri Technologies",
+      period: "April 2024 - Present",
+      location: "Pune, India",
+      description: "Achieved Salesforce Developer Certification during training along with contribution to two full-cycle Salesforce implementation projects",
+      details: [
+        "In the first project, participated in modifying the sales process and played a key role in data migration activities.",
+        "In the second project (Service Cloud), worked on the telephony system using Service Cloud Voice with Amazon Connect, implemented an Experience Cloud site for end users using custom Lightning components, integrated Salesforce with a third-party system, and developed a chatbot for customer support."
+      ],
+      technologies: ["Salesforce", "Apex", "Lightning Web Components", "Service Cloud", "Experience Cloud", "Amazon Connect", "Chatbot Development"]
     },
     {
-      title: "Full Stack Developer",
-      company: "Digital Innovations",
-      period: "2022 - 2023",
-      description: "Developed and maintained multiple client projects. Collaborated with design and product teams to deliver high-quality solutions.",
-      technologies: ["React", "Express.js", "PostgreSQL", "Firebase", "TypeScript"]
-    },
-    {
-      title: "Frontend Developer",
-      company: "Web Studio",
-      period: "2021 - 2022",
-      description: "Built responsive user interfaces and implemented modern frontend architectures. Worked with various frameworks and libraries.",
-      technologies: ["React", "Vue.js", "Tailwind CSS", "JavaScript", "HTML/CSS"]
-    },
-    {
-      title: "Junior Developer",
-      company: "StartupXYZ",
-      period: "2020 - 2021",
-      description: "Started my journey in web development. Learned modern technologies and contributed to team projects.",
-      technologies: ["JavaScript", "HTML", "CSS", "Git", "Bootstrap"]
+      id: 2,
+      title: "Intern",
+      company: "Vodafone Idea",
+      period: "Dec 2022 - March 23",
+      location: "Pune, India",
+      description: "During my internship, I gained deeper insight into the internal workings of mobile communication systems. I worked on a number routing project where I was responsible for migrating traffic from one gateway to another, ensuring seamless call routing and minimal service disruption.",
+      details: [],
+      technologies: ["Telecommunications", "Number Routing", "Gateway Migration", "Call Routing Systems"]
     }
+    // Add more experience here as needed
+    // Example:
+    // {
+    //   id: 3,
+    //   title: "Job Title",
+    //   company: "Company Name",
+    //   period: "Period",
+    //   location: "Location",
+    //   description: "Main description",
+    //   details: ["Detail 1", "Detail 2"],
+    //   technologies: ["Tech 1", "Tech 2"]
+    // }
   ];
 
   return (
@@ -42,7 +50,7 @@ const Experience = () => {
         <div className="max-w-4xl mx-auto">
           <div className="space-y-8">
             {experiences.map((exp, index) => (
-              <div key={index} className="relative">
+              <div key={exp.id} className="relative">
                 {/* Timeline Line */}
                 {index < experiences.length - 1 && (
                   <div className="absolute left-6 top-16 bottom-0 w-0.5 bg-gray-300"></div>
@@ -65,13 +73,28 @@ const Experience = () => {
                       </span>
                     </div>
                     
-                    <h4 className="text-lg font-medium text-primary mb-3">
-                      {exp.company}
-                    </h4>
+                    <div className="flex items-center space-x-4 mb-3">
+                      <h4 className="text-lg font-medium text-primary">
+                        {exp.company}
+                      </h4>
+                      <span className="text-sm text-gray-500">
+                        {exp.location}
+                      </span>
+                    </div>
                     
                     <p className="text-gray-600 leading-relaxed mb-4">
                       {exp.description}
                     </p>
+                    
+                    {exp.details.length > 0 && (
+                      <div className="mb-4">
+                        {exp.details.map((detail, detailIndex) => (
+                          <p key={detailIndex} className="text-gray-600 leading-relaxed mb-2 pl-4 border-l-2 border-primary/20">
+                            {detail}
+                          </p>
+                        ))}
+                      </div>
+                    )}
                     
                     <div className="flex flex-wrap gap-2">
                       {exp.technologies.map((tech, techIndex) => (
