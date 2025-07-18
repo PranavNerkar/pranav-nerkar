@@ -53,7 +53,7 @@ const Projects = () => {
   ];
 
   return (
-    <section id="projects" className="section-padding bg-gray-50">
+    <section id="projects" className="section-padding bg-gradient-to-b from-blue-50 via-white to-blue-100">
       <div className="container-custom">
         <h2 className="text-4xl font-bold text-center text-gray-900 mb-12">
           Featured Projects

@@ -1,36 +1,17 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { db } from '../firebase';
+import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
 
 const Testimonials = () => {
-  const testimonials = [
-    {
-      name: "Sarah Johnson",
-      role: "Project Manager",
-      company: "Tech Solutions Inc.",
-      content: "Pranav is an exceptional developer who consistently delivers high-quality work. His attention to detail and problem-solving skills are outstanding.",
-      rating: 5
-    },
-    {
-      name: "Michael Chen",
-      role: "Senior Developer",
-      company: "Digital Innovations",
-      content: "Working with Pranav was a great experience. He's not only technically skilled but also a great team player who always goes the extra mile.",
-      rating: 5
-    },
-    {
-      name: "Dr. Emily Rodriguez",
-      role: "Professor",
-      company: "University of Technology",
-      content: "Pranav was one of my top students. His dedication to learning and ability to apply complex concepts to real-world problems is remarkable.",
-      rating: 5
-    },
-    {
-      name: "David Thompson",
-      role: "CEO",
-      company: "StartupXYZ",
-      content: "Pranav helped us build our MVP from scratch. His technical expertise and understanding of business requirements made him invaluable to our team.",
-      rating: 5
-    }
-  ];
+  const [testimonials, setTestimonials] = useState([]);
+
+  useEffect(() => {
+    const q = query(collection(db, 'testimonials'), orderBy('createdAt', 'desc'));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      setTestimonials(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+    });
+    return () => unsubscribe();
+  }, []);
 
   const renderStars = (rating) => {
     return [...Array(5)].map((_, index) => (
@@ -46,44 +27,50 @@ const Testimonials = () => {
   };
 
   return (
-    <section id="testimonials" className="section-padding bg-gray-50">
+    <section id="testimonials" className="section-padding bg-gradient-to-b from-blue-50 via-white to-blue-100">
       <div className="container-custom">
         <h2 className="text-4xl font-bold text-center text-gray-900 mb-12">
           What People Say
         </h2>
         
-        <div className="grid md:grid-cols-2 gap-8">
-          {testimonials.map((testimonial, index) => (
-            <div key={index} className="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow duration-200">
-              {/* Stars */}
-              <div className="flex mb-4">
-                {renderStars(testimonial.rating)}
-              </div>
-              
-              {/* Content */}
-              <p className="text-gray-600 leading-relaxed mb-6 italic">
-                "{testimonial.content}"
-              </p>
-              
-              {/* Author */}
-              <div className="flex items-center">
-                <div className="w-12 h-12 bg-gradient-to-r from-primary to-blue-700 rounded-full flex items-center justify-center mr-4">
-                  <span className="text-white font-bold text-lg">
-                    {testimonial.name.split(' ').map(n => n[0]).join('')}
-                  </span>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {testimonials.length === 0 ? (
+            <p className="col-span-2 text-center text-gray-500">No testimonials yet.</p>
+          ) : (
+            testimonials.map((testimonial, index) => (
+              <div key={testimonial.id || index} className="bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow duration-200 text-sm">
+                {/* Stars */}
+                <div className="flex mb-2">
+                  {renderStars(testimonial.rating)}
                 </div>
-                
-                <div>
-                  <h4 className="font-semibold text-gray-900">
-                    {testimonial.name}
-                  </h4>
-                  <p className="text-sm text-gray-600">
-                    {testimonial.role} at {testimonial.company}
-                  </p>
+              
+                {/* Testimonial Message */}
+                <p className="text-gray-600 leading-relaxed mb-4 italic text-xs">
+                  "{testimonial.testimonial}"
+                </p>
+              
+                {/* Author */}
+                <div className="flex items-center mt-2">
+                  <div className="w-10 h-10 bg-gradient-to-r from-primary to-blue-700 rounded-full flex items-center justify-center mr-3">
+                    <span className="text-white font-bold text-base">
+                      {testimonial.name ? testimonial.name.split(' ').map(n => n[0]).join('') : '?'}
+                    </span>
+                  </div>
+                  
+                  <div>
+                    <h4 className="font-semibold text-gray-900 text-sm">
+                      {testimonial.name || 'Anonymous'}
+                    </h4>
+                    <p className="text-xs text-gray-600">
+                      {testimonial.position ? testimonial.position : ''}
+                      {testimonial.position && testimonial.company ? ' at ' : ''}
+                      {testimonial.company ? testimonial.company : ''}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
     </section>

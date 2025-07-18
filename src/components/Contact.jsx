@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { db } from '../firebase';
 import { collection, addDoc, Timestamp } from 'firebase/firestore';
 
@@ -6,6 +6,8 @@ const Contact = () => {
   const [activeTab, setActiveTab] = useState('contact');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [contactSubmitted, setContactSubmitted] = useState(false);
+  const [testimonialSubmitted, setTestimonialSubmitted] = useState(false);
 
   // Contact form state
   const [contactForm, setContactForm] = useState({
@@ -42,6 +44,15 @@ const Contact = () => {
     });
   };
 
+  useEffect(() => {
+    if (localStorage.getItem('contactSubmitted') === 'true') {
+      setContactSubmitted(true);
+    }
+    if (localStorage.getItem('testimonialSubmitted') === 'true') {
+      setTestimonialSubmitted(true);
+    }
+  }, []);
+
   const handleContactSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -56,6 +67,8 @@ const Contact = () => {
         linkedIn: '',
         portfolio: ''
       });
+      localStorage.setItem('contactSubmitted', 'true');
+      setContactSubmitted(true);
       // Optionally show a success message
     } catch (error) {
       // Optionally show an error message
@@ -81,6 +94,8 @@ const Contact = () => {
         allowPublicDisplay: false
       });
       setSubmitSuccess(true);
+      localStorage.setItem('testimonialSubmitted', 'true');
+      setTestimonialSubmitted(true);
       setTimeout(() => setSubmitSuccess(false), 5000);
     } catch (error) {
       console.error('Error submitting testimonial:', error);
@@ -162,7 +177,7 @@ const Contact = () => {
                 <div className="flex items-center space-x-4">
                   <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
                     <svg className="w-6 h-6 text-primary" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M22 14.355c0-.742-.564-1.346-1.274-1.416L17.726 13c-.783 0-1.434.484-1.611 1.192-.242.924-.373 1.901-.373 2.908 0 .742.564 1.346 1.274 1.416L20.726 19c.783 0 1.434-.484 1.611-1.192.242-.924.373-1.901.373-2.908zM11.274 13c-.783 0-1.434.484-1.611 1.192-.242.924-.373 1.901-.373 2.908 0 .742.564 1.346 1.274 1.416L14.726 19c.783 0 1.434-.484 1.611-1.192.242-.924.373-1.901.373-2.908 0-.742-.564-1.346-1.274-1.416L11.274 13zM2.726 13c-.783 0-1.434.484-1.611 1.192-.242.924-.373 1.901-.373 2.908 0 .742.564 1.346 1.274 1.416L5.726 19c.783 0 1.434-.484 1.611-1.192.242-.924.373-1.901.373-2.908 0-.742-.564-1.346-1.274-1.416L2.726 13z"/>
+                      <path d="M22 14.355c0-.742-.564-1.346-1.274-1.416L17.726 13c-.783 0-1.434.484-1.611 1.192-.242.924-.373 1.901-.373 2.908 0 .742.564 1.346 1.274 1.416L20.726 19c.783 0 1.434-.484 1.611-1.192.242-.924.373-1.901.373-2.908 0-.742-.564-1.346-1.274-1.416L11.274 13zM11.274 13c-.783 0-1.434.484-1.611 1.192-.242.924-.373 1.901-.373 2.908 0 .742.564 1.346 1.274 1.416L14.726 19c.783 0 1.434-.484 1.611-1.192.242-.924.373-1.901.373-2.908 0-.742-.564-1.346-1.274-1.416L11.274 13zM2.726 13c-.783 0-1.434.484-1.611 1.192-.242.924-.373 1.901-.373 2.908 0 .742.564 1.346 1.274 1.416L5.726 19c.783 0 1.434-.484 1.611-1.192.242-.924.373-1.901.373-2.908 0-.742-.564-1.346-1.274-1.416L2.726 13z"/>
                     </svg>
                   </div>
                   <div>
@@ -205,7 +220,13 @@ const Contact = () => {
                   <h3 className="text-2xl font-semibold text-gray-900 mb-6">
                     Send Message
                   </h3>
-                  
+                  {contactSubmitted ? (
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center mb-6">
+                      <span className="text-green-800 font-medium">
+                        Thank you! You have already submitted your contact information.
+                      </span>
+                    </div>
+                  ) : (
                   <form onSubmit={handleContactSubmit} className="space-y-6">
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
@@ -292,6 +313,7 @@ const Contact = () => {
                       Send Message
                     </button>
                   </form>
+                  )}
                 </div>
               )}
 
@@ -301,14 +323,21 @@ const Contact = () => {
                   <h3 className="text-2xl font-semibold text-gray-900 mb-6">
                     Share Your Experience
                   </h3>
-                  
-                  <div className="mb-6">
-                    <p className="text-gray-600 leading-relaxed">
-                      Have you worked with me or want to share your experience? 
-                      I'd love to hear from you! Your feedback helps me grow and improve.
-                    </p>
-                  </div>
-                  
+                  {(!testimonialSubmitted) && (
+                    <div className="mb-6">
+                      <p className="text-gray-600 leading-relaxed">
+                        Have you worked with me or want to share your experience? 
+                        I'd love to hear from you! Your feedback helps me grow and improve.
+                      </p>
+                    </div>
+                  )}
+                  {testimonialSubmitted ? (
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center mb-6">
+                      <span className="text-green-800 font-medium">
+                        Thank you! You have already submitted a testimonial.
+                      </span>
+                    </div>
+                  ) : (
                   <form onSubmit={handleTestimonialSubmit} className="space-y-6">
                     {/* Personal Information */}
                     <div className="grid md:grid-cols-2 gap-4">
@@ -477,6 +506,7 @@ const Contact = () => {
                       </div>
                     )}
                   </form>
+                  )}
                 </div>
               )}
             </div>
