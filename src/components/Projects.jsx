@@ -1,57 +1,7 @@
 import React from 'react';
+import { projects } from '../data/projectsData'; // Import data from the new file
 
 const Projects = () => {
-  const projects = [
-    {
-      title: "E-Commerce Platform",
-      description: "Full-stack e-commerce application with payment integration, user authentication, and admin dashboard.",
-      image: "🛒",
-      technologies: ["React", "Node.js", "MongoDB", "Stripe", "AWS"],
-      liveUrl: "#",
-      githubUrl: "#"
-    },
-    {
-      title: "Task Management App",
-      description: "Collaborative task management application with real-time updates and team features.",
-      image: "📋",
-      technologies: ["React", "Firebase", "Tailwind CSS", "Framer Motion"],
-      liveUrl: "#",
-      githubUrl: "#"
-    },
-    {
-      title: "Weather Dashboard",
-      description: "Real-time weather application with location-based forecasts and interactive maps.",
-      image: "🌤️",
-      technologies: ["React", "OpenWeather API", "Chart.js", "Geolocation"],
-      liveUrl: "#",
-      githubUrl: "#"
-    },
-    {
-      title: "Portfolio Website",
-      description: "Modern portfolio website with smooth animations and responsive design.",
-      image: "💼",
-      technologies: ["React", "Tailwind CSS", "Framer Motion", "Firebase"],
-      liveUrl: "#",
-      githubUrl: "#"
-    },
-    {
-      title: "Chat Application",
-      description: "Real-time chat application with user authentication and file sharing capabilities.",
-      image: "💬",
-      technologies: ["React", "Socket.io", "Node.js", "MongoDB"],
-      liveUrl: "#",
-      githubUrl: "#"
-    },
-    {
-      title: "Blog Platform",
-      description: "Content management system with markdown support and SEO optimization.",
-      image: "📝",
-      technologies: ["Next.js", "Prisma", "PostgreSQL", "Vercel"],
-      liveUrl: "#",
-      githubUrl: "#"
-    }
-  ];
-
   return (
     <section id="projects" className="section-padding bg-gradient-to-b from-blue-50 via-white to-blue-100">
       <div className="container-custom">
@@ -60,8 +10,8 @@ const Projects = () => {
         </h2>
         
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project, index) => (
-            <div key={index} className="bg-white rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 overflow-hidden">
+          {projects.map((project) => (
+            <div key={project.id} className="bg-white rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 overflow-hidden">
               {/* Project Image */}
               <div className="h-48 bg-gradient-to-br from-primary to-blue-700 flex items-center justify-center">
                 <span className="text-6xl">{project.image}</span>

@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { db } from '../firebase';
-import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
+import { collection, onSnapshot, query, orderBy, where } from 'firebase/firestore';
 
 const Testimonials = () => {
   const [testimonials, setTestimonials] = useState([]);
 
   useEffect(() => {
-    const q = query(collection(db, 'testimonials'), orderBy('createdAt', 'desc'));
+    const q = query(
+      collection(db, 'testimonials'),
+      where("allowPublicDisplay", "==", true),
+      orderBy('createdAt', 'desc')
+    );
     const unsubscribe = onSnapshot(q, (snapshot) => {
       setTestimonials(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
     });
@@ -33,12 +37,12 @@ const Testimonials = () => {
           What People Say
         </h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="flex overflow-x-auto gap-6 pb-4 scrollbar-thin scrollbar-thumb-blue-200 scrollbar-track-blue-50">
           {testimonials.length === 0 ? (
-            <p className="col-span-2 text-center text-gray-500">No testimonials yet.</p>
+            <p className="text-center text-gray-500">No testimonials yet.</p>
           ) : (
-            testimonials.map((testimonial, index) => (
-              <div key={testimonial.id || index} className="bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow duration-200 text-sm">
+            testimonials.slice(0, 36).map((testimonial, index) => (
+              <div key={testimonial.id || index} className="min-w-[300px] max-w-xs bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow duration-200 text-sm flex-shrink-0">
                 {/* Stars */}
                 <div className="flex mb-2">
                   {renderStars(testimonial.rating)}
