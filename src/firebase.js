@@ -4,13 +4,13 @@ import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBiAfnztUfPAGeRNeonE_dW2ERy6mjcl-I",
-  authDomain: "pranav-nerkar-portfolio.firebaseapp.com",
-  projectId: "pranav-nerkar-portfolio",
-  storageBucket: "pranav-nerkar-portfolio.firebasestorage.app",
-  messagingSenderId: "578422781751",
-  appId: "1:578422781751:web:d10eeee69a9b9319670cb2",
-  measurementId: "G-WYK63517DV"
+  apiKey: "AIzaSyBSIwq24mVIvzkqokixIyh-q2fxjdQGQF8",
+  authDomain: "pranav-nerkar-portfolio-756e5.firebaseapp.com",
+  projectId: "pranav-nerkar-portfolio-756e5",
+  storageBucket: "pranav-nerkar-portfolio-756e5.firebasestorage.app",
+  messagingSenderId: "657210858207",
+  appId: "1:657210858207:web:749564a680c3379730e76a",
+  measurementId: "G-G1BMR89868"
 };
 
 // Initialize Firebase
