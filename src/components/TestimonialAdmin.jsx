@@ -7,10 +7,12 @@ import Login from './Login';
 const TestimonialAdmin = () => {
   const [user, setUser] = useState(null);
   const [testimonials, setTestimonials] = useState([]);
+  const [contacts, setContacts] = useState([]); // New state for contacts
   const [editingTestimonial, setEditingTestimonial] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [filter, setFilter] = useState('all'); // 'all', 'true', 'false'
+  const [contactModal, setContactModal] = useState(null); // For viewing contact details
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -26,7 +28,15 @@ const TestimonialAdmin = () => {
       const unsubscribe = onSnapshot(q, (snapshot) => {
         setTestimonials(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
       });
-      return () => unsubscribe();
+      // Fetch contacts
+      const qContacts = query(collection(db, 'contacts'), orderBy('createdAt', 'desc'));
+      const unsubscribeContacts = onSnapshot(qContacts, (snapshot) => {
+        setContacts(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+      });
+      return () => {
+        unsubscribe();
+        unsubscribeContacts();
+      };
     }
   }, [user]);
 
@@ -133,6 +143,62 @@ const TestimonialAdmin = () => {
             ))}
           </div>
         </div>
+
+        {/* Contacts Section */}
+        <div className="bg-white rounded-lg shadow p-6 mt-12">
+          <h2 className="text-2xl font-bold mb-6 text-gray-900">Contact Submissions</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {contacts.length === 0 ? (
+              <div className="col-span-4 text-center text-gray-500 py-4">No contacts yet.</div>
+            ) : (
+              contacts.map(contact => (
+                <div
+                  key={contact.id}
+                  className="border rounded-lg p-4 bg-gray-50 cursor-pointer hover:shadow-md transition-shadow duration-200 flex flex-col justify-between"
+                  onClick={() => setContactModal(contact)}
+                  title="Click to view details"
+                >
+                  <div>
+                    <p className="font-semibold text-lg mb-1">{contact.name}</p>
+                    <p className="text-xs text-gray-500 mb-1">{contact.email}</p>
+                    <p className="text-xs text-gray-600 mb-2 truncate" title={contact.message}>{contact.message}</p>
+                    <div className="flex flex-wrap gap-2 text-xs">
+                      {contact.linkedIn && <a href={contact.linkedIn} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">LinkedIn</a>}
+                      {contact.portfolio && <a href={contact.portfolio} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Portfolio</a>}
+                    </div>
+                  </div>
+                  <div className="text-xs text-gray-400 mt-2">
+                    {contact.createdAt && contact.createdAt.toDate ? contact.createdAt.toDate().toLocaleString() : '-'}
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+
+        {/* Contact Modal */}
+        {contactModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+            <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-lg relative">
+              <button
+                className="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-2xl"
+                onClick={() => setContactModal(null)}
+                aria-label="Close"
+              >
+                &times;
+              </button>
+              <h2 className="text-xl font-bold mb-4">Contact Details</h2>
+              <div className="space-y-3">
+                <div><span className="font-semibold">Name:</span> {contactModal.name}</div>
+                <div><span className="font-semibold">Email:</span> {contactModal.email}</div>
+                <div><span className="font-semibold">Message:</span> <span className="whitespace-pre-line">{contactModal.message}</span></div>
+                <div><span className="font-semibold">LinkedIn:</span> {contactModal.linkedIn ? <a href={contactModal.linkedIn} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">{contactModal.linkedIn}</a> : '-'}</div>
+                <div><span className="font-semibold">Portfolio:</span> {contactModal.portfolio ? <a href={contactModal.portfolio} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">{contactModal.portfolio}</a> : '-'}</div>
+                <div><span className="font-semibold">Date:</span> {contactModal.createdAt && contactModal.createdAt.toDate ? contactModal.createdAt.toDate().toLocaleString() : '-'}</div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Edit Modal */}
         {showModal && editingTestimonial && (
